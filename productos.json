@@ -1,0 +1,30 @@
+[
+  {
+    "titulo": "Bolígrafo azul y transparente",
+    "precio": "5 €",
+    "precio_num": 5.0,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/l2/gl/__/c10420p1273922753/i6569260140.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/boligrafo-azul-y-transparente-1273922753",
+    "item_id": "1273922753",
+    "visualizaciones": 0,
+    "chats": 0,
+    "favoritos": 0,
+    "fecha_publicacion": "19 jun 2026"
+  },
+  {
+    "titulo": "Colchón Viscoelastico",
+    "precio": "100 €",
+    "precio_num": 100.0,
+    "estado": "Caducado",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/au/vf/__/c10420p656517073/i2071560724.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/colchon-viscoelastico-656517073",
+    "item_id": "656517073",
+    "visualizaciones": 53,
+    "chats": 0,
+    "favoritos": 0,
+    "fecha_publicacion": "28 jun 2021"
+  }
+]

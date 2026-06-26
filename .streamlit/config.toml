@@ -1,0 +1,12 @@
+[browser]
+gatherUsageStats = false
+
+# Tema fijo claro para que el panel no herede el modo oscuro del sistema
+# (era lo que dejaba texto blanco sobre tarjetas blancas).
+[theme]
+base = "light"
+primaryColor = "#6d5efc"
+backgroundColor = "#f4f5fb"
+secondaryBackgroundColor = "#ffffff"
+textColor = "#16161d"
+font = "sans serif"

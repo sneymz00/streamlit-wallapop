@@ -1,0 +1,10 @@
+.venv/
+chrome-profile/
+chrome-debug-profile/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+.streamlit/secrets.toml
+mis_productos_wallapop.csv
+mis_productos_wallapop.xlsx

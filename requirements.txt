@@ -1,0 +1,7 @@
+streamlit
+selenium
+webdriver-manager
+pandas
+openpyxl
+streamlit-autorefresh
+certifi
