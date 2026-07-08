@@ -204,12 +204,89 @@ def _scroll_hasta_el_final(driver, max_iteraciones: int = 30):
         ultimo_alto = nuevo_alto
 
 
+# JavaScript que extrae TODAS las tarjetas visibles de una sola pasada.
+# Hacerlo en el navegador (una sola llamada) en lugar de con decenas de
+# find_element por tarjeta reduce drásticamente el tiempo con catálogos grandes
+# (200+ productos): pasamos de miles de viajes Selenium a uno por scroll.
+_JS_EXTRAER_CARDS = r"""
+const vendido = arguments[0];
+function txt(el, sels){
+  for (const s of sels){ const n = el.querySelector(s); if (n && n.textContent.trim()) return n.textContent.trim(); }
+  return '';
+}
+function idDe(link){ if(!link) return ''; const m = link.match(/-(\d+)(?:[/?#]|$)/); return m ? m[1] : ''; }
+let cards = Array.from(document.querySelectorAll('tsl-catalog-item'));
+if (!cards.length) cards = Array.from(document.querySelectorAll('ts-item-card'));
+if (!cards.length) cards = Array.from(document.querySelectorAll('a.ItemCard'));
+const out = [];
+for (const c of cards){
+  let titulo = txt(c, ['.info-title', '.ItemCard__title']);
+  if (!titulo){ const t = c.querySelector('[title]'); if (t) titulo = (t.getAttribute('title') || '').trim(); }
+  if (!titulo) titulo = 'Sin título / No detectado';
+
+  let precio = txt(c, ['.info-price', '.ItemCard__price', '.ts-item-card-price']) || '0 €';
+
+  let enlace = '';
+  if (c.tagName === 'A' && c.href) enlace = c.href;
+  if (!enlace){ const a = c.querySelector("a[href*='/item/']") || c.querySelector('a[href]'); if (a) enlace = a.href || a.getAttribute('href') || ''; }
+
+  let imagen = '';
+  for (const s of ['.ItemAvatar', '.item-image', '[style*="background-image"]']){
+    const n = c.querySelector(s);
+    if (n){ const st = n.getAttribute('style') || ''; const m = st.match(/url\((['"]?)(https?:\/\/[^'")]+)/); if (m){ imagen = m[2]; break; } }
+  }
+  if (!imagen){ const im = c.querySelector('img'); if (im){ imagen = (im.getAttribute('src') || im.getAttribute('data-src') || im.getAttribute('srcset') || '').split(' ')[0]; } }
+
+  let estado;
+  if (vendido){ estado = 'Vendido'; }
+  else {
+    estado = '';
+    if (c.querySelector('.CatalogItem__content--expired')) estado = 'Caducado';
+    if (!estado) estado = txt(c, ['.ItemCard__badge', '.item-card-badge']);
+    if (!estado) estado = 'En venta';
+  }
+  out.push({titulo, precio, enlace, imagen, estado, item_id: idDe(enlace)});
+}
+return out;
+"""
+
+
+def _extraer_visibles_js(driver, vendido: bool) -> list[dict]:
+    """Extrae en UNA sola llamada todas las tarjetas presentes en el DOM."""
+    try:
+        crudos = driver.execute_script(_JS_EXTRAER_CARDS, vendido) or []
+    except Exception:
+        # Respaldo: extracción clásica por-elemento (más lenta pero robusta).
+        return _extraer_items(driver, vendido)
+    productos = []
+    for r in crudos:
+        precio = (r.get("precio") or "0 €").strip()
+        enlace = r.get("enlace") or ""
+        productos.append(
+            {
+                "titulo": (r.get("titulo") or "").strip() or "Sin título / No detectado",
+                "precio": precio,
+                "precio_num": _precio_a_numero(precio),
+                "estado": r.get("estado") or ("Vendido" if vendido else "En venta"),
+                "vendido": vendido,
+                "imagen": r.get("imagen") or "",
+                "enlace": enlace,
+                "item_id": r.get("item_id") or _item_id(enlace),
+                "visualizaciones": None,
+                "chats": None,
+                "favoritos": None,
+                "fecha_publicacion": "",
+            }
+        )
+    return productos
+
+
 def _recolectar_scrolleando(
     driver,
     vendido: bool,
     max_iteraciones: int = 400,
-    paciencia: int = 8,
-    pausa: float = 1.3,
+    paciencia: int = 6,
+    pausa: float = 0.8,
 ) -> list[dict]:
     """Carga TODO un catálogo con SCROLL INFINITO y extrae los productos de forma
     incremental (dedupe por id).
@@ -230,14 +307,12 @@ def _recolectar_scrolleando(
 
     def _recolectar_visibles() -> int:
         nuevos = 0
-        for item in _buscar_cards(driver):
-            clave = _clave_item(item)
+        for datos in _extraer_visibles_js(driver, vendido):
+            clave = datos.get("item_id") or datos.get("enlace") or datos.get("titulo")
             if not clave or clave in vistos:
                 continue
-            datos = _extraer_un_item(item, vendido)
-            if datos:
-                vistos[clave] = datos
-                nuevos += 1
+            vistos[clave] = datos
+            nuevos += 1
         return nuevos
 
     for _ in range(max_iteraciones):
@@ -246,8 +321,10 @@ def _recolectar_scrolleando(
         alto = driver.execute_script("return document.body.scrollHeight")
         vh = driver.execute_script("return window.innerHeight") or 800
 
-        # Bajar gradualmente (no de golpe al fondo).
-        driver.execute_script("window.scrollBy(0, arguments[0]);", int(vh * 0.8))
+        # Bajar gradualmente (no de golpe al fondo), pero en pasos amplios: la
+        # extracción por JS es casi instantánea, así que recolectamos en cada
+        # paso sin penalización y avanzamos rápido.
+        driver.execute_script("window.scrollBy(0, arguments[0]);", int(vh * 0.9))
         # Por si algún layout antiguo aún usa botón de 'ver más'.
         _click_ver_mas(driver)
         time.sleep(pausa)
@@ -467,6 +544,30 @@ def _clic_pestana_vendidos(driver) -> bool:
     return False
 
 
+# Extrae todas las filas de /app/stats en una sola llamada al navegador.
+_JS_EXTRAER_STATS = r"""
+const rows = Array.from(document.querySelectorAll('tsl-item-stats-row'));
+const out = [];
+for (const f of rows){
+  let enlace = ''; const a = f.querySelector("a[href*='/item/']"); if (a) enlace = a.href || '';
+  const m = enlace.match(/-(\d+)(?:[/?#]|$)/); const iid = m ? m[1] : '';
+  if (!iid) continue;
+  let fecha = ''; const fd = f.querySelector('.col-date span') || f.querySelector('.col-date'); if (fd) fecha = fd.textContent.trim();
+  let vis = null, chats = null, fav = null;
+  for (const cnt of f.querySelectorAll('.col-counters')){
+    let icon = ''; const ic = cnt.querySelector('tsl-svg-icon'); if (ic) icon = ic.getAttribute('src') || '';
+    const dig = (cnt.textContent || '').replace(/[^\d]/g, '');
+    const num = dig ? parseInt(dig, 10) : null;
+    if (icon.includes('views')) vis = num;
+    else if (icon.includes('ico-message')) chats = num;
+    else if (icon.includes('heart')) fav = num;
+  }
+  out.push({iid, visualizaciones: vis, chats, favoritos: fav, fecha_publicacion: fecha});
+}
+return out;
+"""
+
+
 def _extraer_stats(driver) -> dict:
     """Navega a /app/stats y devuelve {item_id: {visualizaciones, chats,
     favoritos, fecha_publicacion}} para cruzar con los productos."""
@@ -482,43 +583,22 @@ def _extraer_stats(driver) -> dict:
         time.sleep(1)
         filas = driver.find_elements(By.TAG_NAME, "tsl-item-stats-row")
     _scroll_hasta_el_final(driver, max_iteraciones=15)
-    filas = driver.find_elements(By.TAG_NAME, "tsl-item-stats-row")
 
-    # Mapea cada icono de contador a su métrica.
-    iconos = {"views": "visualizaciones", "ico-message": "chats", "heart": "favoritos"}
-    for fila in filas:
-        try:
-            enlace = ""
-            try:
-                enlace = fila.find_element(
-                    By.CSS_SELECTOR, "a[href*='/item/']"
-                ).get_attribute("href") or ""
-            except Exception:
-                pass
-            iid = _item_id(enlace)
-            if not iid:
-                continue
-            registro = {
-                "visualizaciones": None,
-                "chats": None,
-                "favoritos": None,
-                "fecha_publicacion": _texto(fila, ".col-date span, .col-date"),
-            }
-            for contador in fila.find_elements(By.CSS_SELECTOR, ".col-counters"):
-                try:
-                    icono = contador.find_element(
-                        By.CSS_SELECTOR, "tsl-svg-icon"
-                    ).get_attribute("src") or ""
-                except Exception:
-                    icono = ""
-                metrica = next(
-                    (v for k, v in iconos.items() if k in icono), None
-                )
-                if metrica:
-                    registro[metrica] = _a_entero(contador.text)
-            stats[iid] = registro
-        except Exception:
+    # Extraemos TODAS las filas de una sola pasada en el navegador (rápido).
+    try:
+        crudos = driver.execute_script(_JS_EXTRAER_STATS) or []
+    except Exception:
+        crudos = []
+    for r in crudos:
+        iid = r.get("iid")
+        if not iid:
             continue
+        stats[iid] = {
+            "visualizaciones": r.get("visualizaciones"),
+            "chats": r.get("chats"),
+            "favoritos": r.get("favoritos"),
+            "fecha_publicacion": (r.get("fecha_publicacion") or "").strip(),
+        }
     return stats
 
 
@@ -538,9 +618,9 @@ def extraer_productos(
         if not _puerto_abierto("127.0.0.1", adjuntar_puerto):
             raise RuntimeError(
                 f"No hay ningún Chrome escuchando en el puerto {adjuntar_puerto}.\n"
-                "Cierra Chrome del todo (Cmd+Q) y vuelve a abrirlo en modo "
-                "depuración con:\n"
-                "  bash abrir_chrome_debug.sh"
+                "Cierra Chrome del todo y vuelve a abrirlo en modo depuración "
+                "haciendo doble clic en:\n"
+                "  abrir_chrome_debug.bat"
             )
         driver = _navegador_adjunto(adjuntar_puerto)
     else:

@@ -206,14 +206,22 @@
     .seg { margin-left: 0 !important; flex: 1 1 100%; }
     .seg button { flex: 1; justify-content: center; min-height: 44px; }
 
-    .layout { padding: 16px 16px 48px; gap: 20px; }
-    .panel { position: static; top: auto; padding: 20px; }
+    /* En móvil los PRODUCTOS van primero y el panel de estadísticas debajo. */
+    .layout { display: flex; flex-direction: column; padding: 16px 16px 48px; gap: 20px; }
+    main { order: 1; }
+    .panel { order: 2; position: static; top: auto; padding: 20px; }
     .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 12px; margin-bottom: 20px; }
     .kpi b { font-size: 1.5rem; }
 
     .grid { gap: 14px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
     .item .body { padding: 14px; gap: 6px; }
     .item .precio { font-size: 1.25rem; }
+
+    /* Respeta el área segura en móviles con notch (viewport-fit=cover). */
+    header, .hero, .controls, .layout, footer {
+      padding-left: max(16px, env(safe-area-inset-left));
+      padding-right: max(16px, env(safe-area-inset-right));
+    }
   }
 
   /* ===== Móvil pequeño (<=430px) ===== */

@@ -109,8 +109,14 @@ web pública y gratuita puedes usar **GitHub Pages**.
 
 ### Republicar después de actualizar
 
-Cada vez que regeneres la web y quieras subir los cambios, haz **doble clic en
-`publicar.bat`**.
+Una vez conectado el repositorio, tienes dos formas de subir los cambios:
+
+- **Desde el panel (lo más cómodo):** pulsa **"Publicar en GitHub Pages"** en la
+  barra lateral. Regenera la web y la sube automáticamente.
+- **Doble clic en `publicar.bat`.**
+
+La **primera vez** que publiques, Git puede abrir una ventana para que inicies
+sesión en GitHub; hazlo una vez y quedará recordado.
 
 ---
 

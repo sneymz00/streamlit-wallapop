@@ -1,21 +1,21 @@
 """
-Panel de Wallapop (Streamlit) — se ejecuta en TU Mac.
+Panel de Wallapop (Streamlit) — se ejecuta en TU ordenador (Windows).
 
-  streamlit run script.py
+Arráncalo con doble clic en INICIAR.bat (o: streamlit run script.py).
 
 Flujo:
-1. "Actualizar ahora" abre Chrome con tu sesión, extrae tus productos
+1. "Sincronizar Datos" abre Chrome con tu sesión, extrae tus productos
    (con imágenes) y genera index.html, la web autónoma que puedes subir
    a cualquier hosting.
 2. Aquí mismo puedes filtrar, ordenar, ver imágenes y un gráfico de precios,
-   y descargar index.html / CSV.
+   descargar index.html / CSV y publicar en GitHub Pages.
 
 NOTA: necesita tu navegador con tu login, por lo que funciona en local,
 NO en Streamlit Community Cloud.
-new line
 """
 
 import os
+import subprocess
 import datetime as dt
 import pandas as pd
 import altair as alt
@@ -266,8 +266,8 @@ usar_chrome_abierto = st.sidebar.checkbox(
     "Usar Chrome en modo debug (puerto 9222)", value=True
 )
 st.sidebar.caption(
-    "Abre la ventana con `bash abrir_chrome_debug.sh` e inicia sesión. "
-    "El panel reutilizará tu sesión activa."
+    "Abre la ventana con doble clic en `abrir_chrome_debug.bat` e inicia "
+    "sesión. El panel reutilizará tu sesión activa."
 )
 primera_vez = st.sidebar.checkbox(
     "Forzar espera de inicio de sesión", value=False
@@ -308,6 +308,58 @@ def actualizar():
         st.warning(
             "No se encontró ningún producto. Verifica tu sesión."
         )
+
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+def _git(args):
+    """Ejecuta un comando git en la carpeta del proyecto y devuelve el resultado."""
+    return subprocess.run(
+        ["git"] + args, cwd=BASE_DIR, capture_output=True, text=True
+    )
+
+
+def publicar():
+    """Regenera la web y la sube a GitHub Pages (git add + commit + push)."""
+    with st.spinner("Publicando en GitHub Pages..."):
+        generar_web.generar()  # asegura que index.html está al día
+        if not os.path.exists(os.path.join(BASE_DIR, "index.html")):
+            st.error("Aún no hay index.html. Pulsa 'Sincronizar Datos' primero.")
+            return
+        if not os.path.isdir(os.path.join(BASE_DIR, ".git")):
+            st.error(
+                "Esta carpeta no está conectada a GitHub todavía. Configúrala "
+                "una vez (ver README, apartado 'Publicar') y vuelve a intentarlo."
+            )
+            return
+        # Identidad de git (solo si no está configurada, para poder commitear).
+        if not _git(["config", "user.email"]).stdout.strip():
+            _git(["config", "user.email", "wallapop@local"])
+            _git(["config", "user.name", "Panel Wallapop"])
+
+        _git(["add", "index.html"])
+        if os.path.exists(os.path.join(BASE_DIR, "productos.json")):
+            _git(["add", "productos.json"])
+
+        # ¿Hay algo que subir?
+        if _git(["diff", "--cached", "--quiet"]).returncode == 0:
+            st.info("No hay cambios nuevos que publicar.")
+            return
+
+        _git(["commit", "-m", f"Actualiza catálogo ({dt.datetime.now():%d/%m/%Y %H:%M})"])
+        push = _git(["push"])
+        if push.returncode == 0:
+            st.success(
+                "✅ Catálogo publicado. En 1-2 minutos estará actualizado en tu web."
+            )
+        else:
+            st.error(
+                "No se pudo subir a GitHub:\n\n"
+                + (push.stderr or push.stdout or "Error desconocido")
+                + "\n\nSi es la primera vez, es posible que Git te pida iniciar "
+                "sesión en una ventana emergente."
+            )
 
 
 if st.button("Sincronizar Datos", type="primary"):
@@ -497,3 +549,9 @@ if os.path.exists(html_path):
         st.sidebar.download_button(
             "Descargar Catálogo (HTML)", f.read(), "index.html", "text/html"
         )
+
+st.sidebar.divider()
+st.sidebar.header("Publicar")
+st.sidebar.caption("Sube tu catálogo a la web (GitHub Pages).")
+if st.sidebar.button("Publicar en GitHub Pages"):
+    publicar()

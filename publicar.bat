@@ -32,6 +32,13 @@ if not exist ".git" (
     exit /b 1
 )
 
+REM Configura la identidad de git si aun no existe (necesario para commitear).
+for /f "delims=" %%i in ('git config user.email 2^>nul') do set "GITMAIL=%%i"
+if not defined GITMAIL (
+    git config user.email "wallapop@local"
+    git config user.name "Panel Wallapop"
+)
+
 set "MSG=%~1"
 if "%MSG%"=="" set "MSG=Actualiza catalogo Wallapop"
 
