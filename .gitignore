@@ -8,3 +8,4 @@ __pycache__/
 .streamlit/secrets.toml
 mis_productos_wallapop.csv
 mis_productos_wallapop.xlsx
+productos.json
