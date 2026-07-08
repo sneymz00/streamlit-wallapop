@@ -2,7 +2,12 @@
 <html lang="es" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Mi catálogo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -80,7 +85,7 @@
   
   .controls input[type=search], .controls select {
     background: var(--surface); color: var(--text-main); border: 1px solid var(--border);
-    border-radius: 8px; padding: 10px 16px; font-family: inherit; font-size: 0.9rem;
+    border-radius: 8px; padding: 11px 16px; font-family: inherit; font-size: 16px;
     box-shadow: var(--shadow-sm); transition: border-color 0.2s; outline: none;
   }
   .controls input[type=search] { min-width: 280px; padding-left: 38px; }
@@ -94,6 +99,22 @@
   .seg button:hover { background: var(--badge-bg); }
   .seg button.on { background: var(--primary); color: #fff; }
 
+  .precio-filtro { display: flex; align-items: center; gap: 6px; }
+  .controls input.num {
+    width: 92px; background: var(--surface); color: var(--text-main);
+    border: 1px solid var(--border); border-radius: 8px; padding: 11px 12px;
+    font-family: inherit; font-size: 16px; box-shadow: var(--shadow-sm); outline: none;
+  }
+  .controls input.num:focus { border-color: var(--primary); }
+  .precio-filtro .sep { color: var(--text-muted); font-weight: 700; }
+  .btn-clear {
+    background: transparent; color: var(--text-muted); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px; font-family: inherit; font-weight: 600;
+    font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .btn-clear:hover { background: var(--badge-bg); color: var(--text-main); }
+
   .layout { display: grid; grid-template-columns: 1fr; gap: 32px; padding: 24px 32px 64px; }
   @media(min-width: 1024px) { .layout { grid-template-columns: 300px 1fr; align-items: start; } }
 
@@ -101,13 +122,15 @@
     background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
     padding: 24px; box-shadow: var(--shadow-md); position: sticky; top: 96px; 
   }
-  .kpis { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
-  .kpi { display: flex; flex-direction: column; }
-  .kpi b { font-size: 1.8rem; font-weight: 800; line-height: 1.2; color: var(--text-main); }
-  .kpi span { color: var(--text-muted); font-size: 0.85rem; font-weight: 500; }
+  .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .kpi { display: flex; flex-direction: column; gap: 2px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+  .kpi.destacado { grid-column: 1 / -1; background: color-mix(in srgb, var(--primary) 10%, var(--surface)); border-color: color-mix(in srgb, var(--primary) 35%, var(--border)); }
+  .kpi b { font-size: 1.4rem; font-weight: 800; line-height: 1.15; color: var(--text-main); }
+  .kpi.destacado b { font-size: 1.7rem; color: var(--primary); }
+  .kpi span { color: var(--text-muted); font-size: 0.78rem; font-weight: 600; }
   .panel h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 0 0 16px; font-weight: 700; }
 
-  .grid { display: grid; gap: 24px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  .grid { display: grid; gap: 24px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); align-items: start; }
   .grid.lista { grid-template-columns: 1fr; }
   
   .item { 
@@ -118,7 +141,7 @@
   .item:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
   .grid.lista .item { flex-direction: row; height: 160px; }
   
-  .thumb { position: relative; aspect-ratio: 1/1; background: var(--badge-bg); flex: none; border-bottom: 1px solid var(--border); }
+  .thumb { position: relative; aspect-ratio: 1/1; width: 100%; background: var(--badge-bg); flex: 0 0 auto; align-self: stretch; border-bottom: 1px solid var(--border); }
   .grid.lista .thumb { width: 160px; border-bottom: none; border-right: 1px solid var(--border); }
   .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
   
@@ -152,6 +175,55 @@
   .vacio { color: var(--text-muted); padding: 64px; text-align: center; grid-column: 1/-1; font-weight: 500; }
 
   footer { padding: 32px; color: var(--text-muted); font-size: 0.85rem; text-align: center; border-top: 1px solid var(--border); font-weight: 500; }
+
+  /* ===== Accesibilidad ===== */
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 3px solid var(--primary); outline-offset: 2px; border-radius: 6px;
+  }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; transition: none !important; scroll-behavior: auto !important; }
+    .item:hover { transform: none; }
+  }
+
+  /* ===== Tablet y móvil grande (<=768px) ===== */
+  @media (max-width: 768px) {
+    header { padding: 10px 16px; gap: 10px; backdrop-filter: none; background: var(--surface); }
+    .title-h { font-size: 1rem; }
+    .meta { display: none; }
+    .hero { padding: 20px 16px 8px; }
+    .hero h1 { font-size: 1.5rem; }
+
+    .controls { padding: 12px 16px; gap: 10px; }
+    .input-group { flex: 1 1 100%; }
+    .controls input[type=search] { min-width: 0; width: 100%; }
+    .controls select { flex: 1 1 calc(50% - 5px); min-width: 0; }
+    .controls label { flex: 1 1 100%; justify-content: space-between; gap: 12px; }
+    .controls input[type=range] { flex: 1; height: 28px; }
+    .seg { margin-left: 0 !important; flex: 1 1 100%; }
+    .seg button { flex: 1; justify-content: center; min-height: 44px; }
+
+    .layout { padding: 16px 16px 48px; gap: 20px; }
+    .panel { position: static; top: auto; padding: 20px; }
+    .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 12px; margin-bottom: 20px; }
+    .kpi b { font-size: 1.5rem; }
+
+    .grid { gap: 14px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    .item .body { padding: 14px; gap: 6px; }
+    .item .precio { font-size: 1.25rem; }
+  }
+
+  /* ===== Móvil pequeño (<=430px) ===== */
+  @media (max-width: 430px) {
+    .theme-btn { width: 44px; height: 44px; }
+    .controls select, .controls input[type=search] { min-height: 46px; }
+    .grid.lista .item { height: auto; }
+    .grid.lista .thumb { width: 116px; }
+    .item .cta, .item .fecha { font-size: 0.8rem; }
+  }
 </style>
 </head>
 <body>
@@ -160,8 +232,8 @@
   <div class="logo"><span class="material-symbols-outlined">inventory_2</span></div>
   <div class="title-h">Mi catálogo</div>
   <div class="meta" id="meta"></div>
-  <button class="theme-btn" id="tema" title="Cambiar tema">
-    <span class="material-symbols-outlined" id="icono-tema">dark_mode</span>
+  <button class="theme-btn" id="tema" title="Cambiar tema" aria-label="Cambiar tema claro u oscuro">
+    <span class="material-symbols-outlined" id="icono-tema" aria-hidden="true">dark_mode</span>
   </button>
 </header>
 
@@ -172,16 +244,17 @@
 
 <div class="controls">
   <div class="input-group">
-    <span class="material-symbols-outlined">search</span>
-    <input id="buscar" type="search" placeholder="Buscar por título...">
+    <span class="material-symbols-outlined" aria-hidden="true">search</span>
+    <label for="buscar" class="sr-only">Buscar</label>
+    <input id="buscar" type="search" placeholder="Buscar por título, estado, precio o ID…" aria-label="Buscar productos">
   </div>
-  <select id="estado">
+  <select id="estado" aria-label="Filtrar por estado">
     <option value="todos">Estado: Todos</option>
     <option value="venta">Solo en venta</option>
     <option value="vendido">Solo vendidos</option>
     <option value="caducado">Solo caducados</option>
   </select>
-  <select id="orden">
+  <select id="orden" aria-label="Ordenar">
     <option value="rel">Ordenar por: Original</option>
     <option value="precio_asc">Precio: Menor a mayor</option>
     <option value="precio_desc">Precio: Mayor a menor</option>
@@ -190,22 +263,36 @@
     <option value="favoritos">Más favoritos</option>
     <option value="chats">Más chats</option>
   </select>
-  <label>Precio máx: <b id="precioMaxLbl"></b> €
-    <input id="precioMax" type="range" min="0" max="100" value="100">
-  </label>
-  <div class="seg" id="vista" style="margin-left: auto;">
-    <button data-v="grid" class="on" title="Cuadrícula"><span class="material-symbols-outlined">grid_view</span></button>
-    <button data-v="lista" title="Lista"><span class="material-symbols-outlined">view_list</span></button>
+  <div class="precio-filtro">
+    <label for="precioMin" class="sr-only">Precio mínimo</label>
+    <input id="precioMin" class="num" type="number" inputmode="numeric" min="0" placeholder="Mín €">
+    <span class="sep" aria-hidden="true">–</span>
+    <label for="precioMax" class="sr-only">Precio máximo</label>
+    <input id="precioMax" class="num" type="number" inputmode="numeric" min="0" placeholder="Máx €">
+  </div>
+  <button id="limpiar" class="btn-clear" type="button" title="Limpiar filtros">
+    <span class="material-symbols-outlined" aria-hidden="true" style="font-size:16px;">restart_alt</span> Limpiar
+  </button>
+  <div class="seg" id="vista" style="margin-left: auto;" role="group" aria-label="Tipo de vista">
+    <button data-v="grid" class="on" title="Cuadrícula" aria-label="Ver en cuadrícula" aria-pressed="true"><span class="material-symbols-outlined" aria-hidden="true">grid_view</span></button>
+    <button data-v="lista" title="Lista" aria-label="Ver en lista" aria-pressed="false"><span class="material-symbols-outlined" aria-hidden="true">view_list</span></button>
   </div>
 </div>
 
 <div class="layout">
   <aside class="panel">
     <div class="kpis">
-      <div class="kpi"><b id="kpiTotal">0</b><span>Productos mostrados</span></div>
+      <div class="kpi destacado"><b id="kpiValor">0 €</b><span>Valor total del catálogo</span></div>
+      <div class="kpi"><b id="kpiTotal">0</b><span>Productos</span></div>
+      <div class="kpi"><b id="kpiEnVenta">0</b><span>En venta</span></div>
       <div class="kpi"><b id="kpiVendidos">0</b><span>Vendidos</span></div>
-      <div class="kpi"><b id="kpiVistas">0</b><span>Visitas totales</span></div>
+      <div class="kpi"><b id="kpiCaducados">0</b><span>Caducados</span></div>
       <div class="kpi"><b id="kpiMedia">0 €</b><span>Precio medio</span></div>
+      <div class="kpi"><b id="kpiRango">–</b><span>Mín · Máx</span></div>
+      <div class="kpi"><b id="kpiVistas">0</b><span>Visitas totales</span></div>
+      <div class="kpi"><b id="kpiFav">0</b><span>Favoritos</span></div>
+      <div class="kpi"><b id="kpiChats">0</b><span>Chats</span></div>
+      <div class="kpi"><b id="kpiVendPct">0%</b><span>Tasa de venta</span></div>
     </div>
     <hr style="border: 0; border-top: 1px solid var(--border); margin: 24px 0;">
     <h3>Distribución de precios</h3>
@@ -238,6 +325,8 @@ function urlSegura(u){
 
 function fmt(n){ return (n==null?0:n).toLocaleString('es-ES'); }
 function precios(){ return PRODUCTOS.map(p=>p.precio_num).filter(v=>v!=null); }
+// Normaliza para búsqueda: minúsculas y sin acentos (á->a, ñ->n se mantiene).
+function norm(s){ return String(s==null?'':s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
 
 function aplicarTema(tema){
   document.documentElement.setAttribute('data-theme', tema);
@@ -253,20 +342,25 @@ function init(){
   }
   aplicarTema(temaGuardado);
 
-  const ps = precios();
-  const max = ps.length ? Math.ceil(Math.max(...ps)) : 100;
-  const slider = document.getElementById('precioMax');
-  slider.max = max; slider.value = max;
-  document.getElementById('precioMaxLbl').textContent = fmt(max);
   document.getElementById('meta').textContent = 'Actualizado: ' + new Date().toLocaleDateString('es-ES');
 
-  ['buscar','estado','orden','precioMax'].forEach(id =>
+  ['buscar','estado','orden','precioMin','precioMax'].forEach(id =>
     document.getElementById(id).addEventListener('input', render));
+
+  document.getElementById('limpiar').addEventListener('click', ()=>{
+    document.getElementById('buscar').value = '';
+    document.getElementById('estado').value = 'todos';
+    document.getElementById('orden').value = 'rel';
+    document.getElementById('precioMin').value = '';
+    document.getElementById('precioMax').value = '';
+    render();
+  });
 
   document.getElementById('vista').addEventListener('click', e=>{
     const b = e.target.closest('button'); if(!b) return;
-    document.querySelectorAll('#vista button').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('#vista button').forEach(x=>{ x.classList.remove('on'); x.setAttribute('aria-pressed','false'); });
     b.classList.add('on');
+    b.setAttribute('aria-pressed','true');
     document.getElementById('grid').classList.toggle('lista', b.dataset.v==='lista');
   });
 
@@ -289,14 +383,22 @@ function claseEstado(p){
 const ETIQUETA = { vendido:'Vendido', caducado:'Caducado', venta:'En venta' };
 
 function filtrar(){
-  const q = document.getElementById('buscar').value.trim().toLowerCase();
+  const terminos = norm(document.getElementById('buscar').value.trim()).split(/\s+/).filter(Boolean);
   const est = document.getElementById('estado').value;
-  const pmax = parseFloat(document.getElementById('precioMax').value);
-  document.getElementById('precioMaxLbl').textContent = fmt(pmax);
-  let arr = PRODUCTOS.filter(p =>
-    String(p.titulo||'').toLowerCase().includes(q) &&
-    (p.precio_num==null || p.precio_num<=pmax) &&
-    (est==='todos' || claseEstado(p)===est));
+  const minV = document.getElementById('precioMin').value;
+  const maxV = document.getElementById('precioMax').value;
+  const pmin = minV==='' ? -Infinity : parseFloat(minV);
+  const pmax = maxV==='' ? Infinity : parseFloat(maxV);
+
+  let arr = PRODUCTOS.filter(p => {
+    const texto = norm([p.titulo, p.estado, ETIQUETA[claseEstado(p)], p.precio, p.item_id].join(' '));
+    const coincide = terminos.every(t => texto.includes(t));
+    const precioOk = (p.precio_num==null)
+      ? (pmin===-Infinity && pmax===Infinity)
+      : (p.precio_num>=pmin && p.precio_num<=pmax);
+    const estadoOk = est==='todos' || claseEstado(p)===est;
+    return coincide && precioOk && estadoOk;
+  });
   const orden = document.getElementById('orden').value;
   const num = (v)=> v==null || v==='' ? -1 : parseFloat(v);
   if(orden==='precio_asc') arr.sort((a,b)=>(a.precio_num??1e15)-(b.precio_num??1e15));
@@ -344,15 +446,31 @@ function render(){
   }).join('') || '<p class="vacio">No hay productos que coincidan con el filtro.</p>';
 
   const ps = arr.map(p=>p.precio_num).filter(v=>v!=null);
-  const media = ps.length ? ps.reduce((a,b)=>a+b,0)/ps.length : 0;
+  const suma = ps.reduce((a,b)=>a+b,0);
+  const media = ps.length ? suma/ps.length : 0;
+  const pMin = ps.length ? Math.min(...ps) : 0;
+  const pMax = ps.length ? Math.max(...ps) : 0;
+  const enVenta = arr.filter(p=>claseEstado(p)==='venta').length;
   const vendidos = arr.filter(p=>claseEstado(p)==='vendido').length;
+  const caducados = arr.filter(p=>claseEstado(p)==='caducado').length;
   const vistas = arr.reduce((a,p)=>a+(parseInt(p.visualizaciones)||0),0);
-  
-  document.getElementById('kpiTotal').textContent = arr.length;
-  document.getElementById('kpiVendidos').textContent = vendidos;
-  document.getElementById('kpiVistas').textContent = fmt(vistas);
-  document.getElementById('kpiMedia').textContent = fmt(Math.round(media)) + ' €';
-  
+  const favoritos = arr.reduce((a,p)=>a+(parseInt(p.favoritos)||0),0);
+  const chats = arr.reduce((a,p)=>a+(parseInt(p.chats)||0),0);
+  const tasa = (vendidos+enVenta)>0 ? Math.round(vendidos/(vendidos+enVenta)*100) : 0;
+
+  const set = (id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v; };
+  set('kpiValor', fmt(Math.round(suma)) + ' €');
+  set('kpiTotal', fmt(arr.length));
+  set('kpiEnVenta', fmt(enVenta));
+  set('kpiVendidos', fmt(vendidos));
+  set('kpiCaducados', fmt(caducados));
+  set('kpiMedia', fmt(Math.round(media)) + ' €');
+  set('kpiRango', ps.length ? (fmt(Math.round(pMin))+' · '+fmt(Math.round(pMax))+' €') : '–');
+  set('kpiVistas', fmt(vistas));
+  set('kpiFav', fmt(favoritos));
+  set('kpiChats', fmt(chats));
+  set('kpiVendPct', tasa + '%');
+
   document.getElementById('resumen').textContent =
     arr.length + ' productos mostrados de ' + PRODUCTOS.length + ' en total';
   dibujarGrafico(ps);

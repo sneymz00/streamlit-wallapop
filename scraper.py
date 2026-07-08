@@ -146,17 +146,137 @@ def _esperar_cards(driver, segundos: int = 15):
     return cards
 
 
+def _click_ver_mas(driver) -> bool:
+    """Pulsa el botón 'Ver más productos' / 'Cargar más' si existe. Wallapop
+    carga el catálogo por lotes y a partir del primero exige pulsar este botón;
+    sin él, el scraper se queda en ~100 productos. Devuelve True si hizo clic."""
+    textos = ("ver más", "cargar más", "mostrar más", "ver mas", "cargar mas")
+    candidatos = driver.find_elements(By.CSS_SELECTOR, "button, a, [role='button']")
+    for el in candidatos:
+        try:
+            txt = (el.text or "").strip().lower()
+            if not txt or not any(t in txt for t in textos):
+                continue
+            if not el.is_displayed():
+                continue
+            driver.execute_script(
+                "arguments[0].scrollIntoView({block:'center'});", el
+            )
+            time.sleep(0.4)
+            driver.execute_script("arguments[0].click();", el)
+            return True
+        except Exception:
+            continue
+    return False
+
+
+def _clave_item(item) -> str:
+    """Clave estable para deduplicar tarjetas entre pasadas de scroll
+    (Wallapop virtualiza la lista y reemplaza las tarjetas del DOM)."""
+    enlace = _enlace_de_card(item)
+    iid = _item_id(enlace)
+    if iid:
+        return iid
+    if enlace:
+        return enlace
+    # Último recurso: título + precio del texto de la tarjeta.
+    try:
+        return (item.text or "").strip()[:80]
+    except Exception:
+        return ""
+
+
 def _scroll_hasta_el_final(driver, max_iteraciones: int = 30):
-    """Hace scroll para cargar todos los productos, con tope para no quedarse
-    en bucle si la página no tiene fin o no carga nada."""
+    """Compatibilidad: hace scroll para cargar contenido (usado por /app/stats)."""
     ultimo_alto = driver.execute_script("return document.body.scrollHeight")
+    estancado = 0
     for _ in range(max_iteraciones):
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        _click_ver_mas(driver)
         time.sleep(2)
         nuevo_alto = driver.execute_script("return document.body.scrollHeight")
         if nuevo_alto == ultimo_alto:
-            break
+            estancado += 1
+            if estancado >= 3:
+                break
+        else:
+            estancado = 0
         ultimo_alto = nuevo_alto
+
+
+def _recolectar_scrolleando(
+    driver,
+    vendido: bool,
+    max_iteraciones: int = 400,
+    paciencia: int = 8,
+    pausa: float = 1.3,
+) -> list[dict]:
+    """Carga TODO un catálogo con SCROLL INFINITO y extrae los productos de forma
+    incremental (dedupe por id).
+
+    Wallapop no usa botón de paginación: carga los productos a ráfagas a medida
+    que te acercas al fondo, y VIRTUALIZA la lista (quita del DOM las tarjetas que
+    salen de pantalla). Por eso:
+      - Se baja de forma GRADUAL (aprox. 80% de pantalla por paso), no de un salto
+        al fondo, para que cada ráfaga entre en el viewport y dé tiempo a cargar.
+      - Se extrae en CADA paso, antes de que las tarjetas se reciclen.
+      - Al llegar al fondo sin novedades se hace un 'empujón' (subir un poco y
+        volver a bajar) para forzar la siguiente ráfaga.
+    Solo se detiene tras `paciencia` intentos seguidos en el fondo sin que
+    aparezcan tarjetas nuevas ni crezca la página."""
+    vistos: dict[str, dict] = {}
+    sin_novedad = 0
+    ultimo_alto = 0
+
+    def _recolectar_visibles() -> int:
+        nuevos = 0
+        for item in _buscar_cards(driver):
+            clave = _clave_item(item)
+            if not clave or clave in vistos:
+                continue
+            datos = _extraer_un_item(item, vendido)
+            if datos:
+                vistos[clave] = datos
+                nuevos += 1
+        return nuevos
+
+    for _ in range(max_iteraciones):
+        nuevos = _recolectar_visibles()
+
+        alto = driver.execute_script("return document.body.scrollHeight")
+        vh = driver.execute_script("return window.innerHeight") or 800
+
+        # Bajar gradualmente (no de golpe al fondo).
+        driver.execute_script("window.scrollBy(0, arguments[0]);", int(vh * 0.8))
+        # Por si algún layout antiguo aún usa botón de 'ver más'.
+        _click_ver_mas(driver)
+        time.sleep(pausa)
+
+        en_fondo = driver.execute_script(
+            "return (window.innerHeight + window.pageYOffset) "
+            ">= (document.body.scrollHeight - 4);"
+        )
+        nuevo_alto = driver.execute_script("return document.body.scrollHeight")
+
+        if nuevos == 0 and nuevo_alto == ultimo_alto and en_fondo:
+            sin_novedad += 1
+            # Empujón para despertar la carga por ráfagas.
+            driver.execute_script("window.scrollBy(0, -600);")
+            time.sleep(0.5)
+            driver.execute_script(
+                "window.scrollTo(0, document.body.scrollHeight);"
+            )
+            time.sleep(pausa)
+            _recolectar_visibles()
+            if sin_novedad >= paciencia:
+                break
+        else:
+            sin_novedad = 0
+        ultimo_alto = nuevo_alto
+
+    # Última pasada por si quedó una ráfaga final sin recolectar.
+    _recolectar_visibles()
+    return list(vistos.values())
 
 
 def _precio_a_numero(precio: str):
@@ -254,73 +374,75 @@ def _enlace_de_card(item) -> str:
     return ""
 
 
+def _extraer_un_item(item, vendido: bool = False) -> dict | None:
+    """Extrae los datos de UNA tarjeta de producto. Devuelve None si falla."""
+    try:
+        # Título
+        titulo = _primer_existente(item, [".info-title", ".ItemCard__title"])
+        if not titulo:
+            try:
+                titulo = (
+                    item.find_element(By.CSS_SELECTOR, "[title]").get_attribute("title")
+                    or ""
+                ).strip()
+            except Exception:
+                pass
+        if not titulo:
+            titulo = "Sin título / No detectado"
+
+        # Precio
+        precio = _primer_existente(
+            item, [".info-price", ".ItemCard__price", ".ts-item-card-price"]
+        )
+        if not precio:
+            precio = "0 €"
+
+        # Enlace e imagen
+        enlace = _enlace_de_card(item)
+        imagen = _imagen_de_card(item)
+
+        # Estado: vendido > caducado > badge clásico > en venta
+        if vendido:
+            estado = "Vendido"
+        else:
+            estado = ""
+            try:
+                if item.find_elements(
+                    By.CSS_SELECTOR, ".CatalogItem__content--expired"
+                ):
+                    estado = "Caducado"
+            except Exception:
+                pass
+            if not estado:
+                estado = _texto(item, ".ItemCard__badge, .item-card-badge")
+            if not estado:
+                estado = "En venta"
+
+        return {
+            "titulo": titulo.strip(),
+            "precio": precio.strip(),
+            "precio_num": _precio_a_numero(precio),
+            "estado": estado,
+            "vendido": vendido,
+            "imagen": imagen,
+            "enlace": enlace,
+            "item_id": _item_id(enlace),
+            # Se rellenan luego al cruzar con /app/stats:
+            "visualizaciones": None,
+            "chats": None,
+            "favoritos": None,
+            "fecha_publicacion": "",
+        }
+    except Exception:
+        return None
+
+
 def _extraer_items(driver, vendido: bool = False) -> list[dict]:
-    items = _buscar_cards(driver)
     productos = []
-    for item in items:
-        try:
-            # Título
-            titulo = _primer_existente(item, [".info-title", ".ItemCard__title"])
-            if not titulo:
-                try:
-                    titulo = (
-                        item.find_element(By.CSS_SELECTOR, "[title]").get_attribute(
-                            "title"
-                        )
-                        or ""
-                    ).strip()
-                except Exception:
-                    pass
-            if not titulo:
-                titulo = "Sin título / No detectado"
-
-            # Precio
-            precio = _primer_existente(
-                item, [".info-price", ".ItemCard__price", ".ts-item-card-price"]
-            )
-            if not precio:
-                precio = "0 €"
-
-            # Enlace e imagen
-            enlace = _enlace_de_card(item)
-            imagen = _imagen_de_card(item)
-
-            # Estado: vendido > caducado > badge clásico > en venta
-            if vendido:
-                estado = "Vendido"
-            else:
-                estado = ""
-                try:
-                    if item.find_elements(
-                        By.CSS_SELECTOR, ".CatalogItem__content--expired"
-                    ):
-                        estado = "Caducado"
-                except Exception:
-                    pass
-                if not estado:
-                    estado = _texto(item, ".ItemCard__badge, .item-card-badge")
-                if not estado:
-                    estado = "En venta"
-
-            productos.append(
-                {
-                    "titulo": titulo.strip(),
-                    "precio": precio.strip(),
-                    "precio_num": _precio_a_numero(precio),
-                    "estado": estado,
-                    "vendido": vendido,
-                    "imagen": imagen,
-                    "enlace": enlace,
-                    "item_id": _item_id(enlace),
-                    # Se rellenan luego al cruzar con /app/stats:
-                    "visualizaciones": None,
-                    "chats": None,
-                    "favoritos": None,
-                    "fecha_publicacion": "",
-                }
-            )
-        except Exception:
-            continue
+    for item in _buscar_cards(driver):
+        datos = _extraer_un_item(item, vendido)
+        if datos:
+            productos.append(datos)
     return productos
 
 
@@ -436,13 +558,20 @@ def extraer_productos(
             driver.get(URL_PRODUCTOS)
             _esperar_cards(driver, segundos=8)
 
-        _scroll_hasta_el_final(driver)
-        productos = _extraer_items(driver, vendido=False)
+        productos = _recolectar_scrolleando(driver, vendido=False)
 
         # 2) VENDIDOS (pestaña; su URL directa redirige a published).
         if _clic_pestana_vendidos(driver):
-            _scroll_hasta_el_final(driver, max_iteraciones=15)
-            productos += _extraer_items(driver, vendido=True)
+            productos += _recolectar_scrolleando(driver, vendido=True)
+
+        # Deduplicar por id de anuncio (por si una tarjeta aparece en ambas vistas).
+        unicos = {}
+        for p in productos:
+            clave = p.get("item_id") or p.get("enlace") or p.get("titulo")
+            # Preferimos la versión 'vendido' si el mismo id aparece dos veces.
+            if clave not in unicos or p.get("vendido"):
+                unicos[clave] = p
+        productos = list(unicos.values())
 
         # 3) ESTADÍSTICAS: visualizaciones, chats y favoritos por anuncio.
         stats = _extraer_stats(driver)
