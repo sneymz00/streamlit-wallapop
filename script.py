@@ -272,6 +272,9 @@ st.sidebar.caption(
 primera_vez = st.sidebar.checkbox(
     "Forzar espera de inicio de sesión", value=False
 )
+publicar_auto = st.sidebar.checkbox(
+    "Publicar en GitHub tras sincronizar", value=True
+)
 auto = st.sidebar.toggle("Refresco automático UI", value=False)
 intervalo_min = st.sidebar.number_input(
     "Frecuencia (minutos)", min_value=1, max_value=180, value=15, step=1
@@ -308,6 +311,11 @@ def actualizar():
         st.warning(
             "No se encontró ningún producto. Verifica tu sesión."
         )
+        return
+    # Tras refrescar la base de datos, subir automáticamente a GitHub.
+    # (publicar() no sube nada si no hay cambios reales, así que es seguro.)
+    if publicar_auto:
+        publicar()
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
