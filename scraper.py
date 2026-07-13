@@ -602,6 +602,31 @@ def _extraer_stats(driver) -> dict:
     return stats
 
 
+def _clase_estado(p: dict) -> str:
+    """Clasifica un producto: 'vendido' | 'caducado' | 'venta' (en venta)."""
+    if p.get("vendido") or re.search(r"vendido", str(p.get("estado", "")), re.I):
+        return "vendido"
+    if re.search(r"caducad", str(p.get("estado", "")), re.I):
+        return "caducado"
+    return "venta"
+
+
+def _cargar_csv_existente() -> pd.DataFrame:
+    """Devuelve el CSV actual como DataFrame (vacío si no existe o falla)."""
+    try:
+        return pd.read_csv(CSV_PATH)
+    except Exception:
+        return pd.DataFrame()
+
+
+def _ids_previos() -> set:
+    """IDs de anuncio guardados en la BD anterior (para saber cuáles eliminar)."""
+    df = _cargar_csv_existente()
+    if df.empty or "item_id" not in df.columns:
+        return set()
+    return {str(x).strip() for x in df["item_id"].dropna().tolist() if str(x).strip()}
+
+
 def extraer_productos(
     esperar_login_segundos: int = 0,
     adjuntar_puerto: int | None = None,
@@ -638,20 +663,14 @@ def extraer_productos(
             driver.get(URL_PRODUCTOS)
             _esperar_cards(driver, segundos=8)
 
-        productos = _recolectar_scrolleando(driver, vendido=False)
+        # Recolectar SOLO el catálogo publicado (scroll infinito hasta el final).
+        # No entramos en la pestaña de 'Vendidos': lo que ya no aparezca aquí se
+        # considera vendido o desactivado y se eliminará de la base de datos.
+        recolectados = _recolectar_scrolleando(driver, vendido=False)
 
-        # 2) VENDIDOS (pestaña; su URL directa redirige a published).
-        if _clic_pestana_vendidos(driver):
-            productos += _recolectar_scrolleando(driver, vendido=True)
-
-        # Deduplicar por id de anuncio (por si una tarjeta aparece en ambas vistas).
-        unicos = {}
-        for p in productos:
-            clave = p.get("item_id") or p.get("enlace") or p.get("titulo")
-            # Preferimos la versión 'vendido' si el mismo id aparece dos veces.
-            if clave not in unicos or p.get("vendido"):
-                unicos[clave] = p
-        productos = list(unicos.values())
+        # Nos quedamos ÚNICAMENTE con los anuncios EN VENTA (se descartan los
+        # caducados, que no cuentan como activos).
+        productos = [p for p in recolectados if _clase_estado(p) == "venta"]
 
         # 3) ESTADÍSTICAS: visualizaciones, chats y favoritos por anuncio.
         stats = _extraer_stats(driver)
@@ -671,14 +690,39 @@ def extraer_productos(
         else:
             driver.quit()
 
-    # Guardar JSON (lo consume la web HTML) y CSV
-    if productos:
-        with open(JSON_PATH, "w", encoding="utf-8") as f:
-            json.dump(productos, f, ensure_ascii=False, indent=2)
+    # === Sincronizar la BD con los anuncios ACTIVOS (en venta) ===
+    # La base de datos es un espejo del catálogo activo actual: los anuncios que
+    # ya no aparecen se eliminan (se entienden como vendidos o desactivados).
+    if not productos:
+        # Protección: si no se detectó nada, NO vaciamos la BD (probable fallo de
+        # sesión o de carga). Conservamos lo que ya había.
+        print(
+            "⚠️  No se detectaron anuncios activos: no se modifica la base de datos "
+            "para no borrarla por error. ¿Iniciaste sesión y estabas en 'Productos'?"
+        )
+        return _cargar_csv_existente()
+
+    ids_nuevos = {str(p.get("item_id")).strip() for p in productos if p.get("item_id")}
+    previos = _ids_previos()
+    eliminados = previos - ids_nuevos
+
+    print(f"✅ Anuncios activos detectados: {len(productos)}")
+    if previos:
+        nuevos_ids = ids_nuevos - previos
+        if nuevos_ids:
+            print(f"➕ {len(nuevos_ids)} anuncios nuevos respecto a la BD anterior.")
+        if eliminados:
+            print(
+                f"🗑️  {len(eliminados)} anuncios ya no están activos "
+                f"(vendidos/desactivados) y se eliminan de la BD."
+            )
+
+    # Escribir la BD nueva (reemplaza por completo: los que faltan quedan borrados).
+    with open(JSON_PATH, "w", encoding="utf-8") as f:
+        json.dump(productos, f, ensure_ascii=False, indent=2)
 
     df = pd.DataFrame(productos)
-    if not df.empty:
-        df.to_csv(CSV_PATH, index=False, encoding="utf-8-sig")
+    df.to_csv(CSV_PATH, index=False, encoding="utf-8-sig")
     return df
 
 
@@ -686,7 +730,7 @@ if __name__ == "__main__":
     print("🚀 Abriendo Wallapop. Si es la primera vez, inicia sesión en la ventana.")
     df = extraer_productos(esperar_login_segundos=60)
     if df.empty:
-        print("❌ No se extrajeron productos. ¿Iniciaste sesión y estabas en 'Productos'?")
+        print("❌ No hay anuncios activos en la base de datos.")
     else:
-        print(f"✅ {len(df)} productos guardados en {JSON_PATH} y {CSV_PATH}")
+        print(f"📦 BD sincronizada: {len(df)} anuncios activos guardados en {CSV_PATH}")
         print(df.head())
