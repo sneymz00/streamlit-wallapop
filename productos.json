@@ -1,5 +1,6 @@
 [
   {
+<<<<<<< Updated upstream
     "titulo": "Marga the Cat and the Forgotten Poem",
     "precio": "4,50 €",
     "precio_num": 4.5,
@@ -366,6 +367,234 @@
   {
     "titulo": "Colgador Fórmula 1  *Nuevo",
     "precio": "9 €",
+=======
+    "titulo": "Sólo para tus ojos de J. J. Benítez",
+    "precio": "14 €",
+    "precio_num": 14.0,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/kw/b1/__/c10420p1263586048/i6504971057.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/solo-para-tus-ojos-de-j-j-benitez-1263586048",
+    "item_id": "1263586048",
+    "visualizaciones": 38,
+    "chats": 1,
+    "favoritos": 2,
+    "fecha_publicacion": "18 may 2026"
+  },
+  {
+    "titulo": "Robot programable Clementoni Evolution Bluetooh",
+    "precio": "25 €",
+    "precio_num": 25.0,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/kf/hf/__/c10420p1235330397/i6584485942.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/robot-evolution-programable-bluetooth-1235330397",
+    "item_id": "1235330397",
+    "visualizaciones": 13,
+    "chats": 1,
+    "favoritos": 1,
+    "fecha_publicacion": "27 feb 2026"
+  },
+  {
+    "titulo": "Lot 4 llibres Viatge en el temps Geronimo Stilton",
+    "precio": "28,80 €",
+    "precio_num": 28.8,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/l4/3u/__/c10420p1276688199/i6584466012.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/lot-4-llibres-viatge-en-el-temps-geronimo-stilton-1276688199",
+    "item_id": "1276688199",
+    "visualizaciones": 1,
+    "chats": 0,
+    "favoritos": 0,
+    "fecha_publicacion": "28 jun 2026"
+  },
+  {
+    "titulo": "Peluche jirafa bebé EDULAND 36 cm sensorial crujie",
+    "precio": "4 €",
+    "precio_num": 4.0,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/kc/w7/__/c10420p1230981276/i6584438159.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/peluche-jirafa-35cm-1230981276",
+    "item_id": "1230981276",
+    "visualizaciones": 5,
+    "chats": 0,
+    "favoritos": 2,
+    "fecha_publicacion": "14 feb 2026"
+  },
+  {
+    "titulo": "Lot de 9 llibres del Regne de la Fantasia",
+    "precio": "64,80 €",
+    "precio_num": 64.8,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/l4/3i/__/c10420p1276672136/i6584397545.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/lot-de-9-llibres-del-regne-de-la-fantasia-1276672136",
+    "item_id": "1276672136",
+    "visualizaciones": 0,
+    "chats": 0,
+    "favoritos": 0,
+    "fecha_publicacion": "28 jun 2026"
+  },
+  {
+    "titulo": "Wonder (edició català)",
+    "precio": "5 €",
+    "precio_num": 5.0,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/km/lj/__/c10420p1247280752/i6400230283.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/wonder-edicio-catala-1247280752",
+    "item_id": "1247280752",
+    "visualizaciones": 16,
+    "chats": 1,
+    "favoritos": 0,
+    "fecha_publicacion": "31 mar 2026"
+  },
+  {
+    "titulo": "Cojín Tigger Disney",
+    "precio": "8 €",
+    "precio_num": 8.0,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/kc/wb/__/c10420p1230986462/i6295682904.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/cojin-tigger-disney-1230986462",
+    "item_id": "1230986462",
+    "visualizaciones": 12,
+    "chats": 0,
+    "favoritos": 3,
+    "fecha_publicacion": "14 feb 2026"
+  },
+  {
+    "titulo": "Mochilita Cars Rayo McQueen",
+    "precio": "5 €",
+    "precio_num": 5.0,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/kc/x9/__/c10420p1231031316/i6295909447.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/mochila-cars-rayo-mcqueen-1231031316",
+    "item_id": "1231031316",
+    "visualizaciones": 11,
+    "chats": 0,
+    "favoritos": 1,
+    "fecha_publicacion": "14 feb 2026"
+  },
+  {
+    "titulo": "Lote Patrulla Canina",
+    "precio": "10 €",
+    "precio_num": 10.0,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/kc/ws/__/c10420p1231009453/i6295796486.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/lote-patrulla-canina-1231009453",
+    "item_id": "1231009453",
+    "visualizaciones": 21,
+    "chats": 0,
+    "favoritos": 2,
+    "fecha_publicacion": "14 feb 2026"
+  },
+  {
+    "titulo": "Lote Patrulla Canina",
+    "precio": "15 €",
+    "precio_num": 15.0,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/kc/x3/__/c10420p1231023489/i6295869327.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/lote-patrulla-canina-1231023489",
+    "item_id": "1231023489",
+    "visualizaciones": 21,
+    "chats": 0,
+    "favoritos": 1,
+    "fecha_publicacion": "14 feb 2026"
+  },
+  {
+    "titulo": "Mini Puzzle Imán Patrulla Canina Nuevo",
+    "precio": "3,50 €",
+    "precio_num": 3.5,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/kc/vg/__/c10420p1230946069/i6295464290.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/mini-puzzle-iman-patrulla-canina-nuevo-1230946069",
+    "item_id": "1230946069",
+    "visualizaciones": 7,
+    "chats": 0,
+    "favoritos": 2,
+    "fecha_publicacion": "14 feb 2026"
+  },
+  {
+    "titulo": "Puzzle Educa Osos Polares 500 Piezas",
+    "precio": "5 €",
+    "precio_num": 5.0,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/kc/vh/__/c10420p1230948091/i6295475647.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/puzzle-educa-osos-polares-500-piezas-1230948091",
+    "item_id": "1230948091",
+    "visualizaciones": 10,
+    "chats": 0,
+    "favoritos": 1,
+    "fecha_publicacion": "14 feb 2026"
+  },
+  {
+    "titulo": "Puzzle Clementoni Jurassic World 1000 Piezas",
+    "precio": "8 €",
+    "precio_num": 8.0,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/kc/vj/__/c10420p1230950213/i6295486806.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/puzzle-clementoni-jurassic-world-1000-piezas-1230950213",
+    "item_id": "1230950213",
+    "visualizaciones": 10,
+    "chats": 0,
+    "favoritos": 1,
+    "fecha_publicacion": "14 feb 2026"
+  },
+  {
+    "titulo": "Juego de Memoria Disney Princess Identic",
+    "precio": "5 €",
+    "precio_num": 5.0,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/kc/vl/__/c10420p1230952491/i6295499156.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/juego-de-memoria-disney-princess-identic-1230952491",
+    "item_id": "1230952491",
+    "visualizaciones": 9,
+    "chats": 0,
+    "favoritos": 1,
+    "fecha_publicacion": "14 feb 2026"
+  },
+  {
+    "titulo": "Juego Dibujo Djeco Dessin 1",
+    "precio": "10 €",
+    "precio_num": 10.0,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/kc/vn/__/c10420p1230955096/i6295512984.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/juego-dibujo-djeco-dessin-1-1230955096",
+    "item_id": "1230955096",
+    "visualizaciones": 13,
+    "chats": 0,
+    "favoritos": 2,
+    "fecha_publicacion": "14 feb 2026"
+  },
+  {
+    "titulo": "Escuchas espaciales Imaginarium *Nuevo",
+    "precio": "15 €",
+    "precio_num": 15.0,
+    "estado": "En venta",
+    "vendido": false,
+    "imagen": "https://cdn.wallapop.com/images/10420/kc/vp/__/c10420p1230958924/i6295531315.jpg?pictureSize=W320",
+    "enlace": "https://es.wallapop.com/item/escuchas-espaciales-imaginarium-nuevo-1230958924",
+    "item_id": "1230958924",
+    "visualizaciones": 2,
+    "chats": 0,
+    "favoritos": 0,
+    "fecha_publicacion": "14 feb 2026"
+  },
+  {
+    "titulo": "Colgador Fórmula 1 *Nuevo",
+    "precio": "9 €",
+>>>>>>> Stashed changes
     "precio_num": 9.0,
     "estado": "En venta",
     "vendido": false,
@@ -379,35 +608,57 @@
   },
   {
     "titulo": "*Nuevo Tantrix Discovery",
+<<<<<<< Updated upstream
     "precio": "5 €",
+=======
+    "precio": "5 €",
+>>>>>>> Stashed changes
     "precio_num": 5.0,
     "estado": "En venta",
     "vendido": false,
     "imagen": "https://cdn.wallapop.com/images/10420/kc/yg/__/c10420p1231086112/i6296206351.jpg?pictureSize=W320",
     "enlace": "https://es.wallapop.com/item/tantrix-discovery-nuevo-1231086112",
     "item_id": "1231086112",
+<<<<<<< Updated upstream
     "visualizaciones": 15,
+=======
+    "visualizaciones": 14,
+>>>>>>> Stashed changes
     "chats": 1,
     "favoritos": 1,
     "fecha_publicacion": "15 feb 2026"
   },
   {
     "titulo": "Nex 2144 Hero Factory Lego -g1",
+<<<<<<< Updated upstream
     "precio": "14 €",
+=======
+    "precio": "14 €",
+>>>>>>> Stashed changes
     "precio_num": 14.0,
     "estado": "En venta",
     "vendido": false,
     "imagen": "https://cdn.wallapop.com/images/10420/kc/yk/__/c10420p1231091373/i6296240004.jpg?pictureSize=W320",
     "enlace": "https://es.wallapop.com/item/nex-2144-hero-factory-lego-g1-1231091373",
     "item_id": "1231091373",
+<<<<<<< Updated upstream
     "visualizaciones": 17,
     "chats": 0,
     "favoritos": 3,
+=======
+    "visualizaciones": 16,
+    "chats": 0,
+    "favoritos": 2,
+>>>>>>> Stashed changes
     "fecha_publicacion": "15 feb 2026"
   },
   {
     "titulo": "Chi Cragger 2182 Legends of Chima Lego -g1",
+<<<<<<< Updated upstream
     "precio": "13 €",
+=======
+    "precio": "13 €",
+>>>>>>> Stashed changes
     "precio_num": 13.0,
     "estado": "En venta",
     "vendido": false,
@@ -421,7 +672,11 @@
   },
   {
     "titulo": "Furno 2191 Hero Factory Lego -g1",
+<<<<<<< Updated upstream
     "precio": "14 €",
+=======
+    "precio": "14 €",
+>>>>>>> Stashed changes
     "precio_num": 14.0,
     "estado": "En venta",
     "vendido": false,
@@ -430,12 +685,20 @@
     "item_id": "1235323628",
     "visualizaciones": 21,
     "chats": 0,
+<<<<<<< Updated upstream
     "favoritos": 5,
+=======
+    "favoritos": 4,
+>>>>>>> Stashed changes
     "fecha_publicacion": "27 feb 2026"
   },
   {
     "titulo": "Bolsa bici Donald",
+<<<<<<< Updated upstream
     "precio": "4 €",
+=======
+    "precio": "4 €",
+>>>>>>> Stashed changes
     "precio_num": 4.0,
     "estado": "En venta",
     "vendido": false,
@@ -449,35 +712,59 @@
   },
   {
     "titulo": "Bicicleta infantil Cars",
+<<<<<<< Updated upstream
     "precio": "19 €",
+=======
+    "precio": "19 €",
+>>>>>>> Stashed changes
     "precio_num": 19.0,
     "estado": "En venta",
     "vendido": false,
     "imagen": "https://cdn.wallapop.com/images/10420/kd/ix/__/c10420p1232041179/i6301843326.jpg?pictureSize=W320",
     "enlace": "https://es.wallapop.com/item/bicicleta-infantil-roja-cars-1232041179",
     "item_id": "1232041179",
+<<<<<<< Updated upstream
     "visualizaciones": 40,
     "chats": 0,
     "favoritos": 2,
+=======
+    "visualizaciones": 39,
+    "chats": 0,
+    "favoritos": 3,
+>>>>>>> Stashed changes
     "fecha_publicacion": "17 feb 2026"
   },
   {
     "titulo": "Playmobil DC Kinder",
+<<<<<<< Updated upstream
     "precio": "2 €",
+=======
+    "precio": "2 €",
+>>>>>>> Stashed changes
     "precio_num": 2.0,
     "estado": "En venta",
     "vendido": false,
     "imagen": "https://cdn.wallapop.com/images/10420/kc/v3/__/c10420p1230929413/i6296142059.jpg?pictureSize=W320",
     "enlace": "https://es.wallapop.com/item/playmobil-dc-kinder-1230929413",
     "item_id": "1230929413",
+<<<<<<< Updated upstream
     "visualizaciones": 217,
     "chats": 10,
     "favoritos": 12,
+=======
+    "visualizaciones": 216,
+    "chats": 10,
+    "favoritos": 13,
+>>>>>>> Stashed changes
     "fecha_publicacion": "14 feb 2026"
   },
   {
     "titulo": "Reconquista del Reino de la Fantasía. Décimo vi...",
+<<<<<<< Updated upstream
     "precio": "8 €",
+=======
+    "precio": "8 €",
+>>>>>>> Stashed changes
     "precio_num": 8.0,
     "estado": "En venta",
     "vendido": false,
@@ -491,21 +778,33 @@
   },
   {
     "titulo": "Viaje en el Tiempo 3",
+<<<<<<< Updated upstream
     "precio": "8 €",
+=======
+    "precio": "8 €",
+>>>>>>> Stashed changes
     "precio_num": 8.0,
     "estado": "En venta",
     "vendido": false,
     "imagen": "https://cdn.wallapop.com/images/10420/ki/cl/__/c10420p1240144672/i6357157780.jpg?pictureSize=W320",
     "enlace": "https://es.wallapop.com/item/viaje-en-el-tiempo-3-1240144672",
     "item_id": "1240144672",
+<<<<<<< Updated upstream
     "visualizaciones": 11,
+=======
+    "visualizaciones": 10,
+>>>>>>> Stashed changes
     "chats": 0,
     "favoritos": 0,
     "fecha_publicacion": "11 mar 2026"
   },
   {
     "titulo": "Manifiesto para los héroes de cada día: Activa ...",
+<<<<<<< Updated upstream
     "precio": "7 €",
+=======
+    "precio": "7 €",
+>>>>>>> Stashed changes
     "precio_num": 7.0,
     "estado": "En venta",
     "vendido": false,
@@ -519,7 +818,11 @@
   },
   {
     "titulo": "Diamant blau - Care Santos",
+<<<<<<< Updated upstream
     "precio": "6 €",
+=======
+    "precio": "6 €",
+>>>>>>> Stashed changes
     "precio_num": 6.0,
     "estado": "En venta",
     "vendido": false,
@@ -533,7 +836,11 @@
   },
   {
     "titulo": "El professor d'història",
+<<<<<<< Updated upstream
     "precio": "10 €",
+=======
+    "precio": "10 €",
+>>>>>>> Stashed changes
     "precio_num": 10.0,
     "estado": "En venta",
     "vendido": false,
@@ -547,21 +854,33 @@
   },
   {
     "titulo": "La noia d'Aberdeen - Quim Aranda",
+<<<<<<< Updated upstream
     "precio": "9 €",
+=======
+    "precio": "9 €",
+>>>>>>> Stashed changes
     "precio_num": 9.0,
     "estado": "En venta",
     "vendido": false,
     "imagen": "https://cdn.wallapop.com/images/10420/kx/ay/__/c10420p1265262272/i6515648631.jpg?pictureSize=W320",
     "enlace": "https://es.wallapop.com/item/la-noia-d-aberdeen-quim-aranda-1265262272",
     "item_id": "1265262272",
+<<<<<<< Updated upstream
     "visualizaciones": 4,
+=======
+    "visualizaciones": 3,
+>>>>>>> Stashed changes
     "chats": 0,
     "favoritos": 0,
     "fecha_publicacion": "23 may 2026"
   },
   {
     "titulo": "Tot està il·luminat - Safran Foer",
+<<<<<<< Updated upstream
     "precio": "10 €",
+=======
+    "precio": "10 €",
+>>>>>>> Stashed changes
     "precio_num": 10.0,
     "estado": "En venta",
     "vendido": false,
@@ -575,35 +894,55 @@
   },
   {
     "titulo": "El roig i el negre - Stendhal",
+<<<<<<< Updated upstream
     "precio": "4,50 €",
+=======
+    "precio": "4,50 €",
+>>>>>>> Stashed changes
     "precio_num": 4.5,
     "estado": "En venta",
     "vendido": false,
     "imagen": "https://cdn.wallapop.com/images/10420/kx/ay/__/c10420p1265261933/i6515647098.jpg?pictureSize=W320",
     "enlace": "https://es.wallapop.com/item/el-roig-i-el-negre-stendhal-1265261933",
     "item_id": "1265261933",
+<<<<<<< Updated upstream
     "visualizaciones": 8,
+=======
+    "visualizaciones": 7,
+>>>>>>> Stashed changes
     "chats": 0,
     "favoritos": 0,
     "fecha_publicacion": "23 may 2026"
   },
   {
     "titulo": "L'Ombra del Vent - Zafón",
+<<<<<<< Updated upstream
     "precio": "9 €",
+=======
+    "precio": "9 €",
+>>>>>>> Stashed changes
     "precio_num": 9.0,
     "estado": "En venta",
     "vendido": false,
     "imagen": "https://cdn.wallapop.com/images/10420/kx/ax/__/c10420p1265261003/i6515642868.jpg?pictureSize=W320",
     "enlace": "https://es.wallapop.com/item/l-ombra-del-vent-zafon-1265261003",
     "item_id": "1265261003",
+<<<<<<< Updated upstream
     "visualizaciones": 13,
+=======
+    "visualizaciones": 10,
+>>>>>>> Stashed changes
     "chats": 0,
     "favoritos": 1,
     "fecha_publicacion": "23 may 2026"
   },
   {
     "titulo": "El meu cos",
+<<<<<<< Updated upstream
     "precio": "5 €",
+=======
+    "precio": "5 €",
+>>>>>>> Stashed changes
     "precio_num": 5.0,
     "estado": "En venta",
     "vendido": false,
@@ -617,7 +956,11 @@
   },
   {
     "titulo": "Fabuloses cuques",
+<<<<<<< Updated upstream
     "precio": "9 €",
+=======
+    "precio": "9 €",
+>>>>>>> Stashed changes
     "precio_num": 9.0,
     "estado": "En venta",
     "vendido": false,
@@ -631,7 +974,11 @@
   },
   {
     "titulo": "Bolso Pretty Ballerinas",
+<<<<<<< Updated upstream
     "precio": "31 €",
+=======
+    "precio": "31 €",
+>>>>>>> Stashed changes
     "precio_num": 31.0,
     "estado": "En venta",
     "vendido": false,
@@ -645,7 +992,11 @@
   },
   {
     "titulo": "Las intrigantes aventuras del doctor Ecco",
+<<<<<<< Updated upstream
     "precio": "6,50 €",
+=======
+    "precio": "6,50 €",
+>>>>>>> Stashed changes
     "precio_num": 6.5,
     "estado": "En venta",
     "vendido": false,
@@ -659,7 +1010,11 @@
   },
   {
     "titulo": "Zapatos Mascaró 36",
+<<<<<<< Updated upstream
     "precio": "19 €",
+=======
+    "precio": "19 €",
+>>>>>>> Stashed changes
     "precio_num": 19.0,
     "estado": "En venta",
     "vendido": false,
@@ -673,27 +1028,40 @@
   },
   {
     "titulo": "Bel, amor más allá de la muerte",
+<<<<<<< Updated upstream
     "precio": "6 €",
+=======
+    "precio": "6 €",
+>>>>>>> Stashed changes
     "precio_num": 6.0,
     "estado": "En venta",
     "vendido": false,
     "imagen": "https://cdn.wallapop.com/images/10420/ki/d8/__/c10420p1240173602/i6357311208.jpg?pictureSize=W320",
     "enlace": "https://es.wallapop.com/item/bel-amor-mas-alla-de-la-muerte-1240173602",
     "item_id": "1240173602",
+<<<<<<< Updated upstream
     "visualizaciones": 12,
+=======
+    "visualizaciones": 11,
+>>>>>>> Stashed changes
     "chats": 0,
     "favoritos": 0,
     "fecha_publicacion": "11 mar 2026"
   },
   {
     "titulo": "Juan Alquitrán *Tabaco",
+<<<<<<< Updated upstream
     "precio": "5 €",
+=======
+    "precio": "5 €",
+>>>>>>> Stashed changes
     "precio_num": 5.0,
     "estado": "En venta",
     "vendido": false,
     "imagen": "https://cdn.wallapop.com/images/10420/kh/mg/__/c10420p1238924764/i6348735202.jpg?pictureSize=W320",
     "enlace": "https://es.wallapop.com/item/juan-alquitran-tabaco-1238924764",
     "item_id": "1238924764",
+<<<<<<< Updated upstream
     "visualizaciones": 14,
     "chats": 0,
     "favoritos": 1,
@@ -2634,6 +3002,16 @@
   {
     "titulo": "Arenero grande para gatos con pala Nayero Leo",
     "precio": "25 €",
+=======
+    "visualizaciones": 11,
+    "chats": 0,
+    "favoritos": 1,
+    "fecha_publicacion": "08 mar 2026"
+  },
+  {
+    "titulo": "Arenero grande para gatos con pala Nayero Leo",
+    "precio": "25 €",
+>>>>>>> Stashed changes
     "precio_num": 25.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2646,8 +3024,13 @@
     "fecha_publicacion": ""
   },
   {
+<<<<<<< Updated upstream
     "titulo": "Zapatillas NB 420   37",
     "precio": "12 €",
+=======
+    "titulo": "Zapatillas NB 420 37",
+    "precio": "12 €",
+>>>>>>> Stashed changes
     "precio_num": 12.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2661,7 +3044,11 @@
   },
   {
     "titulo": "La barca sin pescador--Siete gritos en el mar",
+<<<<<<< Updated upstream
     "precio": "4 €",
+=======
+    "precio": "4 €",
+>>>>>>> Stashed changes
     "precio_num": 4.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2674,8 +3061,13 @@
     "fecha_publicacion": ""
   },
   {
+<<<<<<< Updated upstream
     "titulo": "Murder Most Unladylike  by R. Stevens",
     "precio": "6 €",
+=======
+    "titulo": "Murder Most Unladylike by R. Stevens",
+    "precio": "6 €",
+>>>>>>> Stashed changes
     "precio_num": 6.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2689,7 +3081,11 @@
   },
   {
     "titulo": "Un adolescente en casa (Dinámica Psicología)",
+<<<<<<< Updated upstream
     "precio": "4 €",
+=======
+    "precio": "4 €",
+>>>>>>> Stashed changes
     "precio_num": 4.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2703,7 +3099,11 @@
   },
   {
     "titulo": "La desintoxicación moral de Europa: y otros esc...",
+<<<<<<< Updated upstream
     "precio": "9 €",
+=======
+    "precio": "9 €",
+>>>>>>> Stashed changes
     "precio_num": 9.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2717,7 +3117,11 @@
   },
   {
     "titulo": "Lego Duplo Diligencia con Accesorios",
+<<<<<<< Updated upstream
     "precio": "15 €",
+=======
+    "precio": "15 €",
+>>>>>>> Stashed changes
     "precio_num": 15.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2731,7 +3135,11 @@
   },
   {
     "titulo": "Playmobil DC Comics Figuras",
+<<<<<<< Updated upstream
     "precio": "8 €",
+=======
+    "precio": "8 €",
+>>>>>>> Stashed changes
     "precio_num": 8.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2745,7 +3153,11 @@
   },
   {
     "titulo": "Playmobil DC Superhéroes",
+<<<<<<< Updated upstream
     "precio": "4 €",
+=======
+    "precio": "4 €",
+>>>>>>> Stashed changes
     "precio_num": 4.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2759,7 +3171,11 @@
   },
   {
     "titulo": "Mi verdadera historia",
+<<<<<<< Updated upstream
     "precio": "12 €",
+=======
+    "precio": "12 €",
+>>>>>>> Stashed changes
     "precio_num": 12.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2773,7 +3189,11 @@
   },
   {
     "titulo": "Rescat al Regne de la Fantasia: Nové viatge",
+<<<<<<< Updated upstream
     "precio": "15 €",
+=======
+    "precio": "15 €",
+>>>>>>> Stashed changes
     "precio_num": 15.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2787,7 +3207,11 @@
   },
   {
     "titulo": "*Nuevo Dolce & Gabbana Perfection Veil 4",
+<<<<<<< Updated upstream
     "precio": "39 €",
+=======
+    "precio": "39 €",
+>>>>>>> Stashed changes
     "precio_num": 39.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2801,7 +3225,11 @@
   },
   {
     "titulo": "Los sabores perdidos de Raquel Martos",
+<<<<<<< Updated upstream
     "precio": "10 €",
+=======
+    "precio": "10 €",
+>>>>>>> Stashed changes
     "precio_num": 10.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2815,7 +3243,11 @@
   },
   {
     "titulo": "AQC Lady Secret Gold Edition Set Perfume",
+<<<<<<< Updated upstream
     "precio": "10 €",
+=======
+    "precio": "10 €",
+>>>>>>> Stashed changes
     "precio_num": 10.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2829,7 +3261,11 @@
   },
   {
     "titulo": "Longboard Long Island",
+<<<<<<< Updated upstream
     "precio": "65 €",
+=======
+    "precio": "65 €",
+>>>>>>> Stashed changes
     "precio_num": 65.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2842,8 +3278,13 @@
     "fecha_publicacion": ""
   },
   {
+<<<<<<< Updated upstream
     "titulo": "El petit dofí      -g2",
     "precio": "5 €",
+=======
+    "titulo": "El petit dofí -g2",
+    "precio": "5 €",
+>>>>>>> Stashed changes
     "precio_num": 5.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2857,7 +3298,11 @@
   },
   {
     "titulo": "Rinxols d'or (lletra pal)",
+<<<<<<< Updated upstream
     "precio": "4,50 €",
+=======
+    "precio": "4,50 €",
+>>>>>>> Stashed changes
     "precio_num": 4.5,
     "estado": "Vendido",
     "vendido": true,
@@ -2871,7 +3316,11 @@
   },
   {
     "titulo": "Bolso piel Mango",
+<<<<<<< Updated upstream
     "precio": "21 €",
+=======
+    "precio": "21 €",
+>>>>>>> Stashed changes
     "precio_num": 21.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2885,7 +3334,11 @@
   },
   {
     "titulo": "Vacances \"alla romana\"",
+<<<<<<< Updated upstream
     "precio": "5 €",
+=======
+    "precio": "5 €",
+>>>>>>> Stashed changes
     "precio_num": 5.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2899,7 +3352,11 @@
   },
   {
     "titulo": "Tots som Wonder",
+<<<<<<< Updated upstream
     "precio": "7 €",
+=======
+    "precio": "7 €",
+>>>>>>> Stashed changes
     "precio_num": 7.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2913,7 +3370,11 @@
   },
   {
     "titulo": "Les llágrimes de Shiva",
+<<<<<<< Updated upstream
     "precio": "5 €",
+=======
+    "precio": "5 €",
+>>>>>>> Stashed changes
     "precio_num": 5.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2927,7 +3388,11 @@
   },
   {
     "titulo": "Le Livre des Baltimore",
+<<<<<<< Updated upstream
     "precio": "6 €",
+=======
+    "precio": "6 €",
+>>>>>>> Stashed changes
     "precio_num": 6.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2941,7 +3406,11 @@
   },
   {
     "titulo": "100 jocs per a l'hivern i 100 jocs primavera",
+<<<<<<< Updated upstream
     "precio": "14 €",
+=======
+    "precio": "14 €",
+>>>>>>> Stashed changes
     "precio_num": 14.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2955,7 +3424,11 @@
   },
   {
     "titulo": "Excavadora Scoop",
+<<<<<<< Updated upstream
     "precio": "12 €",
+=======
+    "precio": "12 €",
+>>>>>>> Stashed changes
     "precio_num": 12.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2969,7 +3442,11 @@
   },
   {
     "titulo": "Tirant lo Blanc - text adaptat",
+<<<<<<< Updated upstream
     "precio": "6 €",
+=======
+    "precio": "6 €",
+>>>>>>> Stashed changes
     "precio_num": 6.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2983,7 +3460,11 @@
   },
   {
     "titulo": "El soldadet de plom *els 2 llibres 8€*",
+<<<<<<< Updated upstream
     "precio": "5 €",
+=======
+    "precio": "5 €",
+>>>>>>> Stashed changes
     "precio_num": 5.0,
     "estado": "Vendido",
     "vendido": true,
@@ -2997,7 +3478,11 @@
   },
   {
     "titulo": "Els llibres d'A",
+<<<<<<< Updated upstream
     "precio": "10 €",
+=======
+    "precio": "10 €",
+>>>>>>> Stashed changes
     "precio_num": 10.0,
     "estado": "Vendido",
     "vendido": true,
@@ -3011,7 +3496,11 @@
   },
   {
     "titulo": "Peacemakers by Margaret MacMillan",
+<<<<<<< Updated upstream
     "precio": "12 €",
+=======
+    "precio": "12 €",
+>>>>>>> Stashed changes
     "precio_num": 12.0,
     "estado": "Vendido",
     "vendido": true,
@@ -3025,7 +3514,11 @@
   },
   {
     "titulo": "Llibre de meravelles",
+<<<<<<< Updated upstream
     "precio": "5 €",
+=======
+    "precio": "5 €",
+>>>>>>> Stashed changes
     "precio_num": 5.0,
     "estado": "Vendido",
     "vendido": true,
@@ -3039,7 +3532,11 @@
   },
   {
     "titulo": "Aplec de contes en balear",
+<<<<<<< Updated upstream
     "precio": "35 €",
+=======
+    "precio": "35 €",
+>>>>>>> Stashed changes
     "precio_num": 35.0,
     "estado": "Vendido",
     "vendido": true,
@@ -3053,7 +3550,11 @@
   },
   {
     "titulo": "Mi gran libro de curiosidades y Dinosaurios",
+<<<<<<< Updated upstream
     "precio": "10 €",
+=======
+    "precio": "10 €",
+>>>>>>> Stashed changes
     "precio_num": 10.0,
     "estado": "Vendido",
     "vendido": true,
@@ -3067,7 +3568,11 @@
   },
   {
     "titulo": "Lote Perchas Disney",
+<<<<<<< Updated upstream
     "precio": "30 €",
+=======
+    "precio": "30 €",
+>>>>>>> Stashed changes
     "precio_num": 30.0,
     "estado": "Vendido",
     "vendido": true,
@@ -3081,7 +3586,11 @@
   },
   {
     "titulo": "Los números y Mi primera cartera",
+<<<<<<< Updated upstream
     "precio": "7 €",
+=======
+    "precio": "7 €",
+>>>>>>> Stashed changes
     "precio_num": 7.0,
     "estado": "Vendido",
     "vendido": true,
@@ -3095,7 +3604,11 @@
   },
   {
     "titulo": "Cuento Dani y los dinosaurios",
+<<<<<<< Updated upstream
     "precio": "5 €",
+=======
+    "precio": "5 €",
+>>>>>>> Stashed changes
     "precio_num": 5.0,
     "estado": "Vendido",
     "vendido": true,
@@ -3109,7 +3622,11 @@
   },
   {
     "titulo": "Lote (3) Los Compas -g2",
+<<<<<<< Updated upstream
     "precio": "12 €",
+=======
+    "precio": "12 €",
+>>>>>>> Stashed changes
     "precio_num": 12.0,
     "estado": "Vendido",
     "vendido": true,
@@ -3123,7 +3640,11 @@
   },
   {
     "titulo": "Barbamec i les gavines",
+<<<<<<< Updated upstream
     "precio": "6 €",
+=======
+    "precio": "6 €",
+>>>>>>> Stashed changes
     "precio_num": 6.0,
     "estado": "Vendido",
     "vendido": true,
@@ -3137,7 +3658,11 @@
   },
   {
     "titulo": "Wonder (english edition)",
+<<<<<<< Updated upstream
     "precio": "7 €",
+=======
+    "precio": "7 €",
+>>>>>>> Stashed changes
     "precio_num": 7.0,
     "estado": "Vendido",
     "vendido": true,
@@ -3151,7 +3676,11 @@
   },
   {
     "titulo": "Pack libros muñecos Disney",
+<<<<<<< Updated upstream
     "precio": "10 €",
+=======
+    "precio": "10 €",
+>>>>>>> Stashed changes
     "precio_num": 10.0,
     "estado": "Vendido",
     "vendido": true,
@@ -3165,7 +3694,11 @@
   },
   {
     "titulo": "Puzzle Kung Fu Panda",
+<<<<<<< Updated upstream
     "precio": "5 €",
+=======
+    "precio": "5 €",
+>>>>>>> Stashed changes
     "precio_num": 5.0,
     "estado": "Vendido",
     "vendido": true,
@@ -3179,7 +3712,11 @@
   },
   {
     "titulo": "Los enigmas del robot Farfel +dos lobros",
+<<<<<<< Updated upstream
     "precio": "15 €",
+=======
+    "precio": "15 €",
+>>>>>>> Stashed changes
     "precio_num": 15.0,
     "estado": "Vendido",
     "vendido": true,
@@ -3190,6 +3727,7 @@
     "chats": null,
     "favoritos": null,
     "fecha_publicacion": ""
+<<<<<<< Updated upstream
   },
   {
     "titulo": "Tambors màgics",
@@ -6718,5 +7256,7 @@
     "chats": null,
     "favoritos": null,
     "fecha_publicacion": ""
+=======
+>>>>>>> Stashed changes
   }
 ]
