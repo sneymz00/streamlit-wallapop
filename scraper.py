@@ -2,9 +2,11 @@
 Scraper de Wallapop: extrae los productos del usuario y los guarda en productos.json
 (además de CSV). Incluye imagen y campos extra cuando están disponibles.
 
-Usa un perfil de Chrome PERSISTENTE (carpeta ./chrome-profile), de modo que
-solo tengas que iniciar sesión la primera vez; en las siguientes ejecuciones
-la sesión se reutiliza y no hace falta volver a loguearse.
+Conexión AUTOMÁTICA: si no hay un Chrome en modo depuración escuchando en el
+puerto 9222, el propio programa lo abre con un perfil dedicado y persistente
+(carpeta ./chrome-debug-profile). Solo tienes que iniciar sesión la primera vez;
+en las siguientes ejecuciones la sesión se reutiliza sin volver a loguearte ni
+abrir nada a mano.
 """
 
 import os
@@ -33,6 +35,12 @@ CSV_PATH = os.path.join(BASE_DIR, "mis_productos_wallapop.csv")
 JSON_PATH = os.path.join(BASE_DIR, "productos.json")
 URL_PRODUCTOS = "https://es.wallapop.com/app/catalog/published"
 URL_STATS = "https://es.wallapop.com/app/stats"
+
+# Conexión automática: si no hay un Chrome en modo depuración escuchando en este
+# puerto, el propio programa lo abre con un perfil dedicado y persistente (guarda
+# tu sesión de Wallapop, así solo inicias sesión una vez).
+DEBUG_PORT = 9222
+DEBUG_PROFILE_DIR = os.path.join(BASE_DIR, "chrome-debug-profile")
 
 
 def _limpiar_locks(profile_dir: str):
@@ -94,6 +102,93 @@ def _navegador_adjunto(port: int) -> webdriver.Chrome:
     options = Options()
     options.add_experimental_option("debuggerAddress", f"127.0.0.1:{port}")
     return _intentar_arranque(options)
+
+
+def _ruta_chrome() -> str | None:
+    """Localiza el binario de Google Chrome según el sistema operativo.
+    Se puede forzar con la variable de entorno CHROME_BIN."""
+    import shutil
+    import sys
+
+    env = os.environ.get("CHROME_BIN")
+    if env and os.path.exists(env):
+        return env
+
+    candidatos: list[str] = []
+    if sys.platform == "darwin":
+        candidatos += [
+            "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+            "/Applications/Google Chrome Beta.app/Contents/MacOS/Google Chrome Beta",
+            "/Applications/Chromium.app/Contents/MacOS/Chromium",
+        ]
+    elif os.name == "nt":
+        for base in (
+            os.environ.get("ProgramFiles", r"C:\Program Files"),
+            os.environ.get("ProgramFiles(x86)", r"C:\Program Files (x86)"),
+            os.environ.get("LocalAppData", ""),
+        ):
+            if base:
+                candidatos.append(
+                    os.path.join(base, r"Google\Chrome\Application\chrome.exe")
+                )
+    else:  # linux
+        candidatos += [
+            "/usr/bin/google-chrome",
+            "/usr/bin/google-chrome-stable",
+            "/usr/bin/chromium",
+            "/usr/bin/chromium-browser",
+        ]
+
+    for c in candidatos:
+        if c and os.path.exists(c):
+            return c
+    for nombre in (
+        "google-chrome", "google-chrome-stable", "chrome", "chromium",
+        "chromium-browser",
+    ):
+        ruta = shutil.which(nombre)
+        if ruta:
+            return ruta
+    return None
+
+
+def _esperar_puerto(host: str, port: int, timeout: float = 30.0) -> bool:
+    """Espera (hasta `timeout` s) a que un puerto empiece a aceptar conexiones."""
+    fin = time.time() + timeout
+    while time.time() < fin:
+        if _puerto_abierto(host, port, timeout=1.0):
+            return True
+        time.sleep(0.5)
+    return False
+
+
+def _lanzar_chrome_debug(port: int, profile_dir: str, url: str = URL_PRODUCTOS):
+    """Lanza Google Chrome en modo depuración remota con un perfil dedicado y
+    persistente, de forma DESACOPLADA (no se cierra al cerrar el panel).
+    Devuelve el proceso, o None si no se encuentra Chrome."""
+    import subprocess
+
+    chrome = _ruta_chrome()
+    if not chrome:
+        return None
+
+    os.makedirs(profile_dir, exist_ok=True)
+    _limpiar_locks(profile_dir)
+
+    args = [
+        chrome,
+        f"--remote-debugging-port={port}",
+        f"--user-data-dir={profile_dir}",
+        "--no-first-run",
+        "--no-default-browser-check",
+        url,
+    ]
+    kwargs: dict = {"stdout": subprocess.DEVNULL, "stderr": subprocess.DEVNULL}
+    if os.name == "nt":
+        kwargs["creationflags"] = 0x00000008  # DETACHED_PROCESS
+    else:
+        kwargs["start_new_session"] = True  # no muere con el proceso padre
+    return subprocess.Popen(args, **kwargs)
 
 
 def _configurar_navegador(headless: bool = False) -> webdriver.Chrome:
@@ -630,23 +725,39 @@ def _ids_previos() -> set:
 def extraer_productos(
     esperar_login_segundos: int = 0,
     adjuntar_puerto: int | None = None,
+    auto_lanzar: bool = True,
 ) -> pd.DataFrame:
     """
     Extrae los productos y los guarda en productos.json y CSV. Devuelve un DataFrame.
 
-    - adjuntar_puerto: si se indica (p.ej. 9222), se conecta a tu Chrome YA ABIERTO
-      en modo depuración remota y usa tu sesión actual (no abre ventana nueva ni
-      cierra tu navegador). Si es None, lanza un Chrome propio con perfil persistente.
+    - adjuntar_puerto: puerto de depuración de Chrome (p. ej. 9222). Se conecta a TU
+      Chrome usando tu sesión actual. Si no hay ninguno escuchando y auto_lanzar=True
+      (por defecto), el programa ABRE Chrome automáticamente en modo depuración con un
+      perfil dedicado y persistente (solo inicias sesión la primera vez). Si es None,
+      lanza un Chrome propio con perfil persistente (sin puerto de depuración).
+    - auto_lanzar: abre Chrome automáticamente si el puerto aún no está en uso.
     """
     adjunto = adjuntar_puerto is not None
     if adjunto:
         if not _puerto_abierto("127.0.0.1", adjuntar_puerto):
-            raise RuntimeError(
-                f"No hay ningún Chrome escuchando en el puerto {adjuntar_puerto}.\n"
-                "Cierra Chrome del todo y vuelve a abrirlo en modo depuración "
-                "haciendo doble clic en:\n"
-                "  abrir_chrome_debug.bat"
-            )
+            if not auto_lanzar:
+                raise RuntimeError(
+                    f"No hay ningún Chrome escuchando en el puerto {adjuntar_puerto}."
+                )
+            # Conexión AUTOMÁTICA: abrimos Chrome en modo depuración nosotros mismos.
+            proc = _lanzar_chrome_debug(adjuntar_puerto, DEBUG_PROFILE_DIR)
+            if proc is None:
+                raise RuntimeError(
+                    "No se encontró Google Chrome. Instálalo desde "
+                    "https://www.google.com/chrome/ o define la variable de entorno "
+                    "CHROME_BIN con la ruta al ejecutable de Chrome."
+                )
+            if not _esperar_puerto("127.0.0.1", adjuntar_puerto, timeout=30):
+                raise RuntimeError(
+                    f"Chrome no llegó a abrir el puerto {adjuntar_puerto} a tiempo. "
+                    "Reintenta; si persiste, cierra las ventanas de Chrome abiertas "
+                    "con ese perfil y vuelve a intentarlo."
+                )
         driver = _navegador_adjunto(adjuntar_puerto)
     else:
         driver = _configurar_navegador(headless=False)
@@ -683,12 +794,16 @@ def extraer_productos(
                 if s.get("fecha_publicacion"):
                     p["fecha_publicacion"] = s["fecha_publicacion"]
     finally:
-        # Si estamos adjuntos a TU Chrome, no lo cerramos (driver.quit cerraría
-        # tu navegador). Solo soltamos la conexión.
-        if adjunto:
-            driver.command_executor.close()
-        else:
-            driver.quit()
+        try:
+            if adjunto:
+                # Adjuntos a TU Chrome: paramos SOLO el chromedriver local y dejamos
+                # Chrome abierto (sesión persistente lista para el próximo uso). Así
+                # no se cierra tu navegador ni quedan procesos chromedriver colgados.
+                driver.service.stop()
+            else:
+                driver.quit()
+        except Exception:
+            pass
 
     # === Sincronizar la BD con los anuncios ACTIVOS (en venta) ===
     # La base de datos es un espejo del catálogo activo actual: los anuncios que
@@ -727,8 +842,11 @@ def extraer_productos(
 
 
 if __name__ == "__main__":
-    print("🚀 Abriendo Wallapop. Si es la primera vez, inicia sesión en la ventana.")
-    df = extraer_productos(esperar_login_segundos=60)
+    print(
+        "🚀 Conectando con Wallapop. Si es la primera vez, inicia sesión en la "
+        "ventana de Chrome que se abre automáticamente."
+    )
+    df = extraer_productos(esperar_login_segundos=90, adjuntar_puerto=DEBUG_PORT)
     if df.empty:
         print("❌ No hay anuncios activos en la base de datos.")
     else:

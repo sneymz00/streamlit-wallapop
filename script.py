@@ -1,12 +1,14 @@
 """
-Panel de Wallapop (Streamlit) — se ejecuta en TU ordenador (Windows).
+Panel de Wallapop (Streamlit) — se ejecuta en TU ordenador (Windows o macOS).
 
-Arráncalo con doble clic en INICIAR.bat (o: streamlit run script.py).
+Arráncalo con doble clic en INICIAR.bat (Windows) o `bash iniciar.sh` (macOS);
+también vale `streamlit run script.py`.
 
 Flujo:
-1. "Sincronizar Datos" abre Chrome con tu sesión, extrae tus productos
-   (con imágenes) y genera index.html, la web autónoma que puedes subir
-   a cualquier hosting.
+1. "Sincronizar Datos" abre Chrome AUTOMÁTICAMENTE con tu sesión (no hay que
+   abrir nada a mano), extrae tus productos con imágenes y genera index.html,
+   la web autónoma que puedes subir a cualquier hosting. La primera vez inicia
+   sesión en la ventana de Chrome que se abre; luego se reutiliza sola.
 2. Aquí mismo puedes filtrar, ordenar, ver imágenes y un gráfico de precios,
    descargar index.html / CSV y publicar en GitHub Pages.
 
@@ -262,15 +264,13 @@ st.markdown(
 
 # --- Barra lateral ---
 st.sidebar.header("Sincronización")
-usar_chrome_abierto = st.sidebar.checkbox(
-    "Usar Chrome en modo debug (puerto 9222)", value=True
-)
 st.sidebar.caption(
-    "Abre la ventana con doble clic en `abrir_chrome_debug.bat` e inicia "
-    "sesión. El panel reutilizará tu sesión activa."
+    "Al pulsar **Sincronizar Datos** el panel abre Chrome automáticamente y "
+    "reutiliza tu sesión de Wallapop. **La primera vez**, inicia sesión en la "
+    "ventana de Chrome que se abra: queda guardada y ya no tendrás que repetirlo."
 )
 primera_vez = st.sidebar.checkbox(
-    "Forzar espera de inicio de sesión", value=False
+    "Es la primera vez (esperar a que inicie sesión)", value=False
 )
 publicar_auto = st.sidebar.checkbox(
     "Publicar en GitHub tras sincronizar", value=True
@@ -295,12 +295,13 @@ def cargar_csv() -> pd.DataFrame:
 
 
 def actualizar():
-    puerto = 9222 if usar_chrome_abierto else None
-    espera = 0 if usar_chrome_abierto else (90 if primera_vez else 0)
-    with st.spinner("Sincronizando inventario..."):
+    # Conexión automática: adjuntar_puerto=9222; si no hay Chrome escuchando, el
+    # scraper lo abre solo con el perfil persistente.
+    espera = 120 if primera_vez else 0
+    with st.spinner("Conectando con Chrome y sincronizando inventario..."):
         try:
             df_nuevo = extraer_productos(
-                esperar_login_segundos=espera, adjuntar_puerto=puerto
+                esperar_login_segundos=espera, adjuntar_puerto=9222
             )
         except RuntimeError as e:
             st.error(str(e))
@@ -341,10 +342,16 @@ def publicar():
                 "una vez (ver README, apartado 'Publicar') y vuelve a intentarlo."
             )
             return
-        # Identidad de git (solo si no está configurada, para poder commitear).
+        # La identidad de autor se fija a nivel LOCAL del repo (una sola persona).
+        # No inventamos ninguna identidad para no crear un segundo autor.
         if not _git(["config", "user.email"]).stdout.strip():
-            _git(["config", "user.email", "wallapop@local"])
-            _git(["config", "user.name", "Panel Wallapop"])
+            st.error(
+                "Falta la identidad de git en esta carpeta. Configúrala una vez en "
+                "la terminal y vuelve a intentarlo:\n\n"
+                '  git config --local user.name  "<nombre>"\n'
+                '  git config --local user.email "<email>"'
+            )
+            return
 
         _git(["add", "index.html"])
         if os.path.exists(os.path.join(BASE_DIR, "productos.json")):

@@ -3,6 +3,8 @@ import json
 import pandas as pd
 from scraper import CSV_PATH
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 def generar():
     """Lee el CSV de productos y genera un index.html con un diseño profesional y sobrio."""
     if not os.path.exists(CSV_PATH):
@@ -544,11 +546,12 @@ init();
 </html>
 """
     
-    # Escribir el archivo
-    with open("index.html", "w", encoding="utf-8") as f:
+    # Escribir el archivo SIEMPRE junto a este script (no en el cwd actual).
+    salida = os.path.join(BASE_DIR, "index.html")
+    with open(salida, "w", encoding="utf-8") as f:
         f.write(html_content)
-    
-    print("Archivo index.html generado con éxito.")
+
+    print(f"Archivo index.html generado con éxito: {salida}")
 
 if __name__ == "__main__":
     generar()
